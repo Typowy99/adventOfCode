@@ -2,7 +2,7 @@ backpack_list = []
 num = 0
 three_backpack = 0
 
-with open("txt/1.txt", "r") as file:
+with open("input/1.txt", "r") as file:
 
     for line in file.readlines():
         if len(line) > 1:

@@ -1,4 +1,4 @@
-with open('3.txt', 'r') as file:
+with open('input/3.txt', 'r') as file:
     comp = [line.strip() for line in file.readlines()]
 
 # Initialize an empty dictionary to store the priorities

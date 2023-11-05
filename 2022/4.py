@@ -1,4 +1,4 @@
-with open('4.txt', 'r') as file:
+with open('input/4.txt', 'r') as file:
     pairs = [line.strip().split(",") for line in file.readlines()]
 
 
