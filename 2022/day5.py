@@ -26,11 +26,12 @@ def solution(part):
         f = move[1]
         t = move[2]
 
-        if part == 1:
-            stacks[t] = stacks[t] + stacks[f][-c:][::-1]
-        elif part == 2:
-            stacks[t] = stacks[t] + stacks[f][-c:]
-        stacks[f] = stacks[f][:-c]
+        match part:
+            case 1:
+                stacks[t] = stacks[t] + stacks[f][-c:][::-1]
+            case 2:
+                stacks[t] = stacks[t] + stacks[f][-c:]
+                stacks[f] = stacks[f][:-c]
 
     end_word = "".join(letter[-1] for letter in stacks.values())
     return end_word
