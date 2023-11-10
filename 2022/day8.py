@@ -3,13 +3,11 @@ with open('input/8.txt', 'r') as file:
 
 def solution(direct, trees, x_y, scenic_score):
 
-    nums = list()
+    visible_tree = list()
 
     for y, row in enumerate(trees):
 
         for x, tree in enumerate(row):
-
-            tree = int(tree)
 
             match direct:
 
@@ -25,41 +23,28 @@ def solution(direct, trees, x_y, scenic_score):
                 case "column-reverse":
                     location = f"{y}-{len(trees) - 1 - x}"
 
+            # ------ part 1 ------ #
+            tree = int(tree)
 
-            # ------ part 1 ------ # 
-
-            if x == 0:
-                nums.append(tree)
-                if not location in x_y:
+            if x == 0 or tree > visible_tree[-1]:
+                visible_tree.append(tree)
+                if location not in x_y:
                     x_y.append(location)
-                continue
-
-            if tree > nums[-1]:
-                nums.append(tree)
-                if not location in x_y:
-                    x_y.append(location)
-            
-            nums = []
-
-            # ------ part 2 ------ #   
-            
-            count = 0
-            for next_tree in range(x + 1, len(row)):
-
-                # if last tree
-                if x == len(row) - 1:
-                    break
-
-                count += 1
-                # if blocked viev
-                if int(row[next_tree]) == tree:
-                    break
         
-                # if taller tree
-                if int(row[next_tree]) > tree:
+            # ------ part 2 ------#  
+            count = 0
+
+            for next_tree in range(x + 1, len(row)):
+                
+                count += 1
+                # if blocked viev or taller tree or last tree
+                if int(row[next_tree]) == tree or int(row[next_tree]) > tree or x == len(row) - 1:
                     break
-    
+            
+            #add visible tree each side
             scenic_score[location] = scenic_score.get(location, 1) * count
+            
+        visible_tree = []
     
     return x_y, scenic_score
 
