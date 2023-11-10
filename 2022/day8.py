@@ -1,15 +1,15 @@
 with open('input/8.txt', 'r') as file:
     trees_file = [line.strip() for line in file.readlines()]
 
-def solution1(trees, x_y, direct):
+def solution(direct, trees, x_y, scenic_score):
 
     nums = list()
 
     for y, row in enumerate(trees):
 
-        for x, num in enumerate(row):
+        for x, tree in enumerate(row):
 
-            num = int(num)
+            tree = int(tree)
 
             match direct:
 
@@ -25,50 +25,68 @@ def solution1(trees, x_y, direct):
                 case "column-reverse":
                     location = f"{y}-{len(trees) - 1 - x}"
 
+
+            # ------ part 1 ------ # 
+
             if x == 0:
-                nums.append(num)
+                nums.append(tree)
                 if not location in x_y:
                     x_y.append(location)
                 continue
 
-            if num > nums[-1]:
-                nums.append(num)
+            if tree > nums[-1]:
+                nums.append(tree)
                 if not location in x_y:
                     x_y.append(location)
+            
+            nums = []
 
-        nums = []
+            # ------ part 2 ------ #   
+            
+            count = 0
+            for next_tree in range(x + 1, len(row)):
+
+                # if last tree
+                if x == len(row) - 1:
+                    break
+
+                count += 1
+                # if blocked viev
+                if int(row[next_tree]) == tree:
+                    break
+        
+                # if taller tree
+                if int(row[next_tree]) > tree:
+                    break
     
-    return x_y
+            scenic_score[location] = scenic_score.get(location, 1) * count
+    
+    return x_y, scenic_score
 
 
 def main():
+
     x_y = list()
-
-    row_trees = trees_file
-    row_reverse_trees = [row[::-1] for row in row_trees]
-
-    column_trees = list()
-    for y in range(len(row_trees[0])):
-        num = ""
-        for x in range(len(row_trees)):
-             num += row_trees[x][y]
-        column_trees.append(num)
-
-    column_reverse_trees = [row[::-1] for row in column_trees]
+    scenic_score = dict()
 
     # count for left-right trees
-    x_y = solution1(row_trees, x_y, "row")
+    x_y, scenic_score = solution("row", trees_file, x_y, scenic_score)
 
     # count for right-left trees
-    x_y = solution1(row_reverse_trees, x_y, "row-reverse")
+    row_reverse_trees = [row[::-1] for row in trees_file]
+    x_y, scenic_score = solution("row-reverse", row_reverse_trees, x_y, scenic_score)
         
     # count for top-bottom trees
-    x_y = solution1(column_trees, x_y, "column")
+    column_trees =  [''.join(row[x] for row in trees_file) for x in range(len(trees_file))]
+    x_y, scenic_score = solution("column", column_trees, x_y, scenic_score)
 
     # count for bottom-top trees
-    x_y = solution1(column_reverse_trees, x_y, "column-reverse")
+    column_reverse_trees = [row[::-1] for row in column_trees]
+    x_y, scenic_score = solution("column-reverse", column_reverse_trees, x_y, scenic_score)
     
-    print(f"Answer 1: {len(x_y)}")
+    #answer
+    print("Answer 1:", len(x_y))
+    print("Answer 2:", max(scenic_score.values()))
 
 
 if __name__ == "__main__":
