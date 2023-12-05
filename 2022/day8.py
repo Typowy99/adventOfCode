@@ -8,7 +8,7 @@ def solution(direct, trees, x_y, scenic_score):
     for y, row in enumerate(trees):
 
         for x, tree in enumerate(row):
-
+            
             match direct:
 
                 case "row":
@@ -62,7 +62,7 @@ def main():
     x_y, scenic_score = solution("row-reverse", row_reverse_trees, x_y, scenic_score)
         
     # count for top-bottom trees
-    column_trees =  [''.join(row[x] for row in trees_file) for x in range(len(trees_file))]
+    column_trees = [''.join(row[x] for row in trees_file) for x in range(len(trees_file))]
     x_y, scenic_score = solution("column", column_trees, x_y, scenic_score)
 
     # count for bottom-top trees
